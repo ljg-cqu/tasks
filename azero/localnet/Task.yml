@@ -1,0 +1,9 @@
+version: '3'
+
+includes:
+  aleph: ./start_aleph_testnet.yml
+
+tasks:
+  default:
+    cmds:
+      - task: aleph:start_aleph_testnet

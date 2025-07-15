@@ -1,0 +1,30 @@
+version: '3'
+
+vars:
+  ALEPH_DIR: '{{.HOME}}/aleph-node'
+  REPO_URL: 'https://github.com/Cardinal-Cryptography/aleph-node.git'
+
+tasks:
+  check_aleph_dir:
+    cmds:
+      - |
+        if [ ! -d "{{.ALEPH_DIR}}" ]; then
+          echo "Aleph Node directory not found. Cloning repository..."
+          git clone {{.REPO_URL}} {{.ALEPH_DIR}}
+        else
+          echo "Aleph Node directory found."
+        fi
+    silent: true
+
+  run_aleph_testnet:
+    desc: Run Aleph Zero local testnet with 6 validators
+    deps: [check_aleph_dir]
+    cmds:
+      - |
+        if [ -d "{{.ALEPH_DIR}}" ]; then
+          echo "Starting Aleph Zero local testnet..."
+          {{.ALEPH_DIR}}/scripts/run_nodes.sh
+        else
+          echo "Error: Aleph Node directory not found after clone attempt."
+          exit 1
+        fi
